@@ -76,7 +76,10 @@ def room(request, pk):
 def create_room(request):
     form= RoomForm()
     if request.method=='POST':
+
+        #username = request.user.username
         form = RoomForm(request.POST)
+
         if form.is_valid():
             form.save()
             return redirect('home')
@@ -105,3 +108,9 @@ def delete_room(request, pk):
         return redirect('home')
     context={'room':room}
     return render(request, 'base/delete.html', context)
+
+
+def profile_page(request, pk):
+    user = User.objects.get(id=pk)
+    context= {'user':user}
+    return render(request, 'base/profile.html', context)

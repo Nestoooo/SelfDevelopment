@@ -18,7 +18,9 @@
 </style>
 <div class="container">
     <!--user can create new room-->
+    {% if request.user.is_authenticated%}
     <a href="{% url 'create_room' %}">Create Room</a>
+    {% endif %}
     <!-- get category names-->
     <div>
         {% for field in category %}
