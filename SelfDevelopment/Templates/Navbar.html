@@ -6,6 +6,15 @@
     <title>Title</title>
 </head>
 <body>
-<img src = "{% static 'images/logo.svg' %}" />
+<a href=" {% url 'home' %}">
+    <img src = "{% static 'images/logoo.png' %}" width="70" height="70" />
+</a>
+<div align="right">
+    {% if request.user.is_authenticated %}
+    <a href="{% url 'logout' %}">Logout</a>
+    {% else %}
+    <a href="{% url 'login' %}">Login</a>
+    {% endif %}
+</div>
 </body>
 </html>

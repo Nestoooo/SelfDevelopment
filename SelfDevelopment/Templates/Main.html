@@ -4,10 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" type="text" media="screen" href="{% static 'styles/main.css' %}">
+    <link rel="stylesheet" type="text/css" media="screen" href="{% static 'styles/main.css' %}">
 </head>
 <body>
 {% include 'navbar.html' %}
-<h1> main</h1>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
+<h1> Self Development </h1>
+<h1> your path to success </h1>
+{% block content %}
+
+{% endblock%}
 </body>
 </html>

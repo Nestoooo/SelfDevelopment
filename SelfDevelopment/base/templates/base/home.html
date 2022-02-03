@@ -1,10 +1,43 @@
-<!DOCTYPE html>
+
+{% extends 'main.html' %}
+{% block content %}
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" type="text/css" media="screen" href="{% static 'styles/main.css' %}">
 </head>
 <body>
-<h1> home page</h1>
+<!-- separate the page to 2 parts-->
+<style>
+  .container {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+}
+</style>
+<div class="container">
+    <!--user can create new room-->
+    <a href="{% url 'create_room' %}">Create Room</a>
+    <!-- get category names-->
+    <div>
+        {% for field in category %}
+        <h1>
+            <a href="{% url 'category' field.id %}" >{{ field }}</a>
+            <br>
+        </h1>
+        {% endfor %}
+    </div>
+
+    <div>
+        <!--{% for x in typeof_type %}
+        <h1>
+            <a href="{% url 'typeoftype' x.id %}" >{{ x }}</a>
+            <br>
+        </h1>
+        {% endfor %}-->
+    </div>
+</div>
 </body>
 </html>
+{% endblock %}
