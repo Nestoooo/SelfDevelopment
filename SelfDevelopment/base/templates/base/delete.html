@@ -1,0 +1,10 @@
+<html>
+<!--make sure befoe deleting rooms-->
+<form method="POST" action="">
+    {%csrf_token%}
+    <h1>are you sure,you want to delete {{room}}?</h1>
+<input type="submit" value="Delete"/>
+    <a href="{{request.META.HTTP_REFERER}}">Go Back</a>
+</form>
+
+</html>

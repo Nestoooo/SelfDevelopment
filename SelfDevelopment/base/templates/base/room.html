@@ -1,0 +1,46 @@
+{% extends 'main.html'%}
+{% block content%}
+{% load humanize %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- get the room name with its username, description, when it was created and 2 options to delete and edit the room-->
+<div align="center">
+    <a>@{{ room.host }}</a>
+    {{room.created|naturaltime}}
+    <h2><a >{{room}}</a></h2>
+    <h4>{{room.description}}</h4>
+    <a href="{% url 'update_room' room.id %}">Edit</a>
+    <a href="{% url 'delete_room' room.id %}">Delete</a>
+    <br>
+    <hr>
+</div>
+
+
+<!-- get the room messages with its username and when it was created -->
+<div>
+    {% for message in room_messages %}
+    <a>@{{message.user}}</a>
+    {{message.created|timesince}} ago
+    <h4>{{message.body}}</h4>
+    <br>
+    <hr>
+    {% endfor %}
+</div>
+
+<!-- user can add messages -->
+<div>
+    <form method="POST" action="">
+        {% csrf_token %}
+        <input type="text" name="message" placeholder="enter your message"/>
+    </form>
+</div>
+
+
+
+</body>
+</html>
+{% endblock%}

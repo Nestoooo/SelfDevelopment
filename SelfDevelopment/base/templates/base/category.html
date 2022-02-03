@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+{% extends 'main.html' %}
+{% block content%}
+{% load humanize %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!-- user can see category name-->
+<h1> {{ categorys }} </h1>
+<br>
+
+<!-- get category rooms name with its username, description, when it was created and 2 options to delete and edit the room-->
+{% for x in room %}
+<div>
+   <a href="{% url 'room' x.id %}">@{{ x.host }}</a>
+    {{x.created|naturaltime}}
+    <h2><a href="{% url 'room' x.id %}">{{x}}</a></h2>
+   <h4>{{x.description}}</h4>
+    <a href="{% url 'update_room' x.id %}">Edit</a>
+    <a href="{% url 'delete_room' x.id %}">Delete</a>
+    <br>
+    <hr>
+</div>
+
+<br>
+{% endfor %}
+
+</body>
+</html>
+{% endblock %}
