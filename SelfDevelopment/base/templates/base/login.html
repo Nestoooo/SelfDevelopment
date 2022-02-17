@@ -8,8 +8,10 @@
 </head>
 <body>
 <!--user can login with username & password-->
+{% if page == 'login' %}
 <form method="POST" action="" >
     {% csrf_token %}
+
 
     <label> Username: </label>
     <input type="username" name="username" placeholder="Enter Username"/>
@@ -20,7 +22,24 @@
     <br>
     <input type="submit" value="Submit"/>
 
+    <h5>Didnt signd up yet??</h5>
+    <a href="{% url 'register' %}">Sign Up</a>
+
 </form>
+{% else %}
+<form method="POST" action="" >
+    {% csrf_token %}
+    {{form.as_p}}
+
+
+    <br>
+    <input type="submit" value="Register"/>
+
+    <h5>Already signd up??</h5>
+    <a href="{% url 'login' %}">Login</a>
+
+</form>
+{% endif %}
 {% endblock %}
 
 </body>

@@ -9,7 +9,7 @@
 <body>
 <!-- get the room name with its username, description, when it was created and 2 options to delete and edit the room-->
 <div align="center">
-    <a href ="{% url 'profile_page' room.host.id%}">@{{ room.host }}</a>
+    <a href="{% url 'prof_page' room.host %}">@{{ room.host }}</a>
     {{room.created|naturaltime}}
     <h2><a >{{room}}</a></h2>
     <h4>{{room.description}}</h4>
@@ -22,23 +22,29 @@
 
 <!-- get the room messages with its username and when it was created -->
 <div>
-    {% for message in room_messages %}
-    <a href="{% url 'profile_page' message.user.id %}">@{{message.user}}</a>
-    {{message.created|timesince}} ago
-    <h4>{{message.body}}</h4>
+    <center style="font-size:50px">Conversation</center>
     <br>
-    <hr>
-    {% endfor %}
-</div>
+    <br>
+    <div>
+        {% for message in room_messages %}
+        <a href="{% url 'prof_page' message.user %}">@{{message.user}}</a>
+        {{message.created|timesince}} ago
+        <h4>{{message.body}}</h4>
+        <br>
+        <hr>
+        {% endfor %}
+    </div>
 
-<!-- user can add messages -->
-<div>
-    {% if request.user.is_authenticated%}
-    <form method="POST" action="">
-        {% csrf_token %}
-        <input type="text" name="message" placeholder="enter your message"/>
-    </form>
-    {% endif %}
+    <!-- user can add messages -->
+    <div>
+        {% if request.user.is_authenticated%}
+        <form method="POST" action="">
+            {% csrf_token %}
+            <input type="text" name="message" placeholder="enter your message"/>
+        </form>
+        {% endif %}
+    </div>
+
 </div>
 
 

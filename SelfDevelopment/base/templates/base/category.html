@@ -19,6 +19,7 @@
     {{x.created|naturaltime}}
     <h2><a href="{% url 'room' x.id %}">{{x}}</a></h2>
    <h4>{{x.description}}</h4>
+    <h6><a href="{% url 'category' x.id %}">{{x.category}}</a></h6>
     <a href="{% url 'update_room' x.id %}">Edit</a>
     <a href="{% url 'delete_room' x.id %}">Delete</a>
     <br>

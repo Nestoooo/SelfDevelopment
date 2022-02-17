@@ -13,32 +13,73 @@
 <style>
   .container {
   display: grid;
-  grid-template-columns: 1fr 3fr;
+  grid-template-columns: 1fr 2fr 1fr;
 }
 </style>
 <div class="container">
     <!--user can create new room-->
-    {% if request.user.is_authenticated%}
-    <a href="{% url 'create_room' %}">Create Room</a>
-    {% endif %}
+
     <!-- get category names-->
     <div>
-        {% for field in category %}
+        <h2 align="center">Categorys</h2>
+
         <h1>
-            <a href="{% url 'category' field.id %}" >{{ field }}</a>
+            <a href="{% url 'home' %}" >All</a>
             <br>
+            {% for field in category %}
+
+
+            <a href="{% url 'home' %}?q={{field}}" >{{ field }}</a>
+            <br>
+            {% endfor %}
         </h1>
+
+    </div>
+
+
+
+    <div>
+        {% if request.user.is_authenticated%}
+        <a href="{% url 'create_room' %}">Create Room</a>
+        {% endif %}
+        <br>
+        <br>
+
+        {% for x in rooms %}
+
+        <h6><a href="{% url 'prof_page' x.host %}" >@{{x.host}}</a></h6>
+
+
+        {{x.created|timesince}}
+        <h2><a href="{% url 'room' x.id %}">{{x}}</a></h2>
+        <h4>{{x.description}}</h4>
+        <h6><a >{{x.category}}</a></h6>
+        <a href="{% url 'update_room' x.id %}">Edit</a>
+        <a href="{% url 'delete_room' x.id %}">Delete</a>
+        <br>
+        <hr>
         {% endfor %}
     </div>
 
     <div>
+        <h2 >Last feeds</h2>
+        {% for messagee in messagees %}
+        <a href="{% url 'prof_page' messagee.user %}">@{{messagee.user}}</a>
+        <h6>commented on <a href="{% url 'room' messagee.room.id %}">{{messagee.room}}</a> {{messagee.created|timesince}} ago</h6>
+        <h4>{{messagee.body}}</h4>
+        <hr>
+        {% endfor %}
+
+    </div>
+
+
         <!--{% for x in typeof_type %}
         <h1>
             <a href="{% url 'typeoftype' x.id %}" >{{ x }}</a>
             <br>
         </h1>
         {% endfor %}-->
-    </div>
+
 </div>
 </body>
 </html>
