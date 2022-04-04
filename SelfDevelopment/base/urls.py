@@ -11,4 +11,6 @@ urlpatterns = [ path('', views.home, name='home'),
                 path('logout/', views.logout_page, name='logout'),
                 path('register/', views.register_page, name='register'),
                 path('^prof_page/(?P<username>\w+)/$>/', views.prof_page, name='prof_page'),
+                path('edit_user/', views.edit_user, name='edit_user'),
+                #path('^edit_user/(?P<username>\w+)/$>/', views.edit_user, name='edit_user'),
 ]

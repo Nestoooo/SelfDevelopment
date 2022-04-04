@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.db.models import Q
 from .models import Category, Room, Message
-from .forms import RoomForm, MessageForm
+from .forms import RoomForm, MessageForm, UserForm
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
@@ -15,7 +15,7 @@ from django.http import HttpResponse
 def login_page(request):
     page= 'login'
     if request.method=='POST':
-        username= request.POST.get('username')
+        username= request.POST.get('username').lower()
         password= request.POST.get('password')
         try:
             user= User.objects.get(username=username)
@@ -38,6 +38,15 @@ def logout_page(request):
 
 def register_page(request):
     form = UserCreationForm()
+    if request.method=='POST' :
+        form= UserCreationForm(request.POST)
+        if form.is_valid():
+            user=form.save(commit=False)
+            user.username= user.username.lower()
+            user.save()
+            login(request, user)
+            return redirect('home')
+
     context ={'form': form}
     return render(request, 'base/login.html', context)
 
@@ -83,6 +92,7 @@ def room(request, pk):
     #get descriptions of rooms
     room = Room.objects.get(id=pk)
     room_messages= Message.objects.filter(room=room)
+    participants= room.participants.all()
 
     if request.method == 'POST':
         message=request.POST
@@ -91,30 +101,39 @@ def room(request, pk):
             room= room,
             body= request.POST.get('message')
         )
+        room.participants.add(request.user)
         return(redirect('room', pk=room.id))
 
-    context = {'room': room, 'room_messages': room_messages}
+    context = {'room': room, 'room_messages': room_messages,'participants': participants}
     return render(request, 'base/room.html' , context)
 
 #user can create new room & it will be saved in the database
 @login_required(login_url='login')
 def create_room(request):
     form= RoomForm()
+    f= Room()
+    category= Category.objects.all()
     if request.method=='POST':
+
 
         #username = request.user.username
         forme = RoomForm(request.POST)
 
         if forme.is_valid():
-            r= forme.save(commit=False)
+            #r= forme.save(commit=False)
 
-            r.host = request.user
-            r.save()
+            #r.host = request.user
+            #r.save()
+            #form.room = request.POST.get('room_name')
+            #form.category = request.POST.get('topic_name')
+            #form.description =request.POST.get('room_description')
+            forme.host = request.user
+            forme.save()
 
 
             return redirect('home')
 
-    context={'form': form }
+    context={'form': form, 'category': category }
     return render(request, 'base/room_form.html', context)
 
 #user can update a room &the updates will be saved
@@ -142,5 +161,20 @@ def delete_room(request, pk):
 
 def prof_page(request, username):
     user = User.objects.get(username=username)
-    context= {'user':user}
+    rooms =user.room_set.all()
+    category = Category.objects.all
+    messagees = user.message_set.all()
+    context= {'user':user, 'rooms':rooms, 'category' :category, 'messagees': messagees}
     return render(request, 'base/profile.html', context)
+
+def edit_user(request):
+    form = UserForm(instance=request.user)
+
+    if request.method == 'POST':
+        form=UserForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('prof_page', request.user)
+
+    context= {'form': form}
+    return render(request, 'base/edit-user.html', context)
